@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Definity</title>
 </head>
+
 <body>
     <h1>Search for a Word</h1>
     <form method="get" action="">
-        <input type="text" name="word" placeholder="Enter word" required>
+        <input type="text" name="word" value="{{ word }}" placeholder="Enter a word" autocomplete="off" required>
         <button type="submit">Search</button>
     </form>
 
@@ -16,9 +18,22 @@
         <p style="color: red;">{{ error }}</p>
     {% endif %}
 
-    {% if data %}
-        <h2>{{ data.0.hwi.hw }}</h2>
-        <p><strong>Definition - </strong>{{ data.0.shortdef.0 }}</p>
+    {% if meanings %}
+        <h2>{{ word }}</h2>
+
+        {% for meaning in meanings %}
+            <h3>{{ meaning.headword }}</h3>
+            <small>{{ meaning.part_of_speech }}</small>
+
+            <ol>
+                {% for definition in meaning.definitions %}
+                   <li>{{ definition }}</li>
+                {% endfor %}
+            </ol>
+
+        {% endfor %}
     {% endif %}
+    
 </body>
+
 </html>
