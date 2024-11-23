@@ -3,10 +3,8 @@ from django.shortcuts import render
 from django.conf import settings
 
 
-def get_word_definition(request):
+def search(request):
     word = request.GET.get("word", "")  # Get the word from the query parameter
-
-    # If there's a word in the query
 
     # If there's a word in the query
     if word:
@@ -34,14 +32,16 @@ def get_word_definition(request):
 
                 return render(
                     request,
-                    "dictionary/definition.html",
+                    "dictionary/results.html",
                     {"word": word, "meanings": meanings},
                 )
             else:
                 error = "No results found for this word."
         else:
             error = "Error fetching data from the dictionary API."
-    else:
-        error = "Please enter a word to search."
+        return render(
+            request, "dictionary/results.html", {"error": error, "word": word}
+        )
 
-    return render(request, "dictionary/definition.html", {"error": error})
+    # If no word is provided, just show the search form
+    return render(request, "dictionary/home.html")
