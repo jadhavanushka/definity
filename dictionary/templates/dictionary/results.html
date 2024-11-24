@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ word }} definition - Definity</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
 </head>
 
-<body class="flex flex-col items-center justify-center min-h-screen p-6">   
+<body class="flex flex-col items-center justify-center min-h-screen p-6">
     <div class="max-w-2xl mx-auto w-full bg-white py-6 mb-6 border-b border-gray-300">
         <a href="/">
             <h1 class="text-3xl font-bold mb-6 text-teal-600 hover:text-teal-700 text-center">
@@ -15,34 +17,67 @@
         </a>
         <form method="get" action="/" class="flex">
             <input type="text" name="word" value="{{ word }}" placeholder="Enter a word or phrase" autocomplete="off"
-                   class="w-full p-3 border border-gray-300 rounded-s-md focus:outline-none focus:ring-2 focus:ring-teal-500" required>
-            <button type="submit"
-                    class="min-w-24 bg-teal-600 text-white px-4 rounded-e-md hover:bg-teal-700">
+                class="w-full p-3 border border-gray-300 rounded-s-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                required>
+            <button type="submit" class="min-w-24 bg-teal-600 text-white px-4 rounded-e-md hover:bg-teal-700">
                 Search
             </button>
         </form>
     </div>
 
     <div class="max-w-2xl mx-auto bg-white">
-        <h1 class="text-4xl font-bold text-teal-600 mb-4">{{ word }}</h1>
+        <div class="flex items-center gap-3">
+            {% if audio %}
+                <button onclick="playAudio('{{ audio }}')" class="bg-teal-600 hover:bg-teal-700 text-white rounded-full">
+                    <i class="fa-solid fa-volume-high size-12 flex items-center justify-center"></i>
+                </button>
+            {% endif %}
+
+            <h1 class="text-4xl font-bold text-teal-600 mb-4">{{ word }}</h1>
+
+            {% if pronunciation %}
+                <p class="text-gray-600">{{ pronunciation }}</p>
+            {% endif %}
+        </div>
 
         {% if error %}
-            <p class="text-red-500">{{ error }}</p>
+          <p class="text-red-500">{{ error }}</p>
         {% endif %}
 
         {% if meanings %}
             {% for meaning in meanings %}
-                <div class="mb-6 p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold">{{ meaning.headword }}</h2>
-                    <p class="text-sm text-gray-600">{{ meaning.part_of_speech }}</p>
-                    <ol class="list-decimal ml-6 mt-2">
-                        {% for definition in meaning.definitions %}
-                            <li>{{ definition }}</li>
-                        {% endfor %}
-                    </ol>
+            <div class="mb-4 p-6 rounded-lg shadow-md">
+                <p class="text-sm text-gray-600">{{ meaning.part_of_speech }}</p>
+                <div class="flex items-center gap-2">
+                    {% if meaning.audio and not audio %}
+                        <button onclick="playAudio('{{ meaning.audio }}')"
+                            class="text-teal-600 hover:text-teal-700 mt-2">
+                            <i class="fa-solid fa-volume-high size-8 flex items-center justify-center"></i>
+                        </button>
+                    {% endif %}
+
+                        <h2 class="text-xl font-semibold">{{ meaning.headword }}</h2>
+
+                        {% if meaning.pronunciation and not pronunciation %}
+                            <p class="text-sm text-gray-600">{{ meaning.pronunciation }}</p>
+                        {% endif %}
                 </div>
+
+                <ol class="list-decimal ml-6 mt-2">
+                    {% for definition in meaning.definitions %}
+                        <li>{{ definition }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
             {% endfor %}
         {% endif %}
     </div>
+
+    <script>
+        function playAudio(audioUrl) {
+            const audio = new Audio(audioUrl);
+            audio.play();
+        }
+    </script>
 </body>
 </html>
