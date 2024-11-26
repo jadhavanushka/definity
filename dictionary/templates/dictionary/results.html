@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'dictionary/base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ word }} definition - Definity</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
-</head>
+{% block title %}{{ word }} | Definity{% endblock %}
 
-<body class="flex flex-col items-center justify-start min-h-screen p-6">
-    <div class="max-w-2xl mx-auto w-full bg-white py-6 mb-6 border-b border-gray-300">
+{% block content %}
+<section class="flex flex-col items-center justify-start">
+    <div class="max-w-2xl mx-auto w-full py-6 mb-6 border-b border-gray-300">
         <a href="/">
-            <h1 class="text-3xl font-bold mb-6 text-teal-600 hover:text-teal-700 text-center">
-                Definity</h1>
+            <h1 class="text-3xl font-bold mb-4 text-teal-600 hover:text-teal-700 text-center">
+                Definity
+            </h1>
         </a>
         
         <form method="get" action="/" class="flex items-center mx-auto">   
@@ -31,7 +26,7 @@
         </form>
     </div>
 
-    <div class="max-w-2xl mx-auto bg-white">
+    <div class="max-w-2xl mx-auto">
         {% if not error %}
             <div class="flex items-center gap-3">
                 {% if audio %}
@@ -40,7 +35,7 @@
                     </button>
                 {% endif %}
                 
-                <h1 class="text-4xl font-bold text-teal-600 mb-4">{{ word }}</h1>
+                <h2 class="text-4xl font-bold text-teal-600">{{ word }}</h2>
                 
                 {% if pronunciation %}
                     <p class="text-gray-600">{{ pronunciation }}</p>
@@ -65,7 +60,7 @@
                         </button>
                     {% endif %}
 
-                        <h2 class="text-xl font-semibold">{{ meaning.headword }}</h2>
+                        <h3 class="text-xl font-semibold">{{ meaning.headword }}</h3>
 
                         {% if meaning.pronunciation and not pronunciation %}
                             <p class="text-sm text-gray-600">{{ meaning.pronunciation }}</p>
@@ -88,5 +83,5 @@
             audio.play();
         }
     </script>
-</body>
-</html>
+</section>
+{% endblock %}
